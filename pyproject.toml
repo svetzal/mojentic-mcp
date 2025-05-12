@@ -1,0 +1,32 @@
+[project]
+name = "mojentic-mcp"
+version = "0.5.0"
+authors = [
+    { name = "Stacey Vetzal", email = "stacey@vetzal.com" },
+]
+description = "Mojentic MCP is a module for the Mojentic framework that provides basic MCP server and client infrastructure for tools and chat agents."
+readme = "README.md"
+requires-python = ">=3.11"
+classifiers = [
+    'Programming Language :: Python :: 3',
+    'License :: OSI Approved :: MIT License',
+    'Operating System :: OS Independent',
+]
+
+dependencies = [
+    "mojentic",
+    "structlog",
+    "fastapi",
+    "uvicorn",
+]
+
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[project.urls]
+Homepage = "https://github.com/mojility/mojentic-mcp"
+Issues = "https://github.com/mojility/mojentic-mcp/issues"

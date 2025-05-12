@@ -1,0 +1,11 @@
+.idea
+dist
+site
+.venv
+build
+__pycache__
+*.log
+mojentic-mcp.egg-info
+.coverage
+.vscode
+.DS_Store
