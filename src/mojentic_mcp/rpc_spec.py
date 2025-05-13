@@ -3,7 +3,7 @@
 import pytest
 from unittest.mock import Mock
 
-from mojentic_mcp.rpc import JsonRpcHandler, JsonRpcRequest
+from mojentic_mcp.rpc import JsonRpcHandler, JsonRpcRequest, JsonRpcErrorCode
 from mojentic.llm.tools.llm_tool import LLMTool
 
 
@@ -151,7 +151,7 @@ class DescribeJsonRpcHandler:
         assert response["jsonrpc"] == "2.0"
         assert response["id"] == 12
         assert "error" in response
-        assert response["error"]["code"] == -32601
+        assert response["error"]["code"] == JsonRpcErrorCode.METHOD_NOT_FOUND
         assert "Method not found" in response["error"]["message"]
 
 
@@ -173,7 +173,7 @@ class DescribeJsonRpcHandler:
         assert response["jsonrpc"] == "2.0"
         assert response["id"] == 13
         assert "error" in response
-        assert response["error"]["code"] == -32601
+        assert response["error"]["code"] == JsonRpcErrorCode.METHOD_NOT_FOUND
         assert "Tool not found" in response["error"]["message"]
 
     def it_should_handle_resources_list_request(self, mock_tool):

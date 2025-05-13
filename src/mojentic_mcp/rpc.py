@@ -4,6 +4,7 @@ This module provides a common JSONRPC infrastructure that can be used by differe
 transport mechanisms (HTTP, STDIO, etc.) to handle RPC requests.
 """
 
+from enum import IntEnum
 from importlib.metadata import version
 from typing import Dict, Any, Optional, List
 
@@ -11,6 +12,13 @@ from mojentic.llm.tools.llm_tool import LLMTool
 from pydantic import BaseModel, Field
 
 
+class JsonRpcErrorCode(IntEnum):
+    """Standard JSON-RPC 2.0 error codes."""
+    PARSE_ERROR = -32700
+    INVALID_REQUEST = -32600
+    METHOD_NOT_FOUND = -32601
+    INVALID_PARAMS = -32602
+    INTERNAL_ERROR = -32603
 
 
 class JsonRpcRequest(BaseModel):
@@ -78,7 +86,7 @@ class JsonRpcHandler:
         if method not in self.methods:
             return self._create_error_response(
                 request_id,
-                -32601,
+                JsonRpcErrorCode.METHOD_NOT_FOUND,
                 f"Method not found: {method}"
             )
 
@@ -96,7 +104,7 @@ class JsonRpcHandler:
         except Exception as e:
             return self._create_error_response(
                 request_id,
-                -32603,
+                JsonRpcErrorCode.INTERNAL_ERROR,
                 f"Internal error: {str(e)}"
             )
 
@@ -152,18 +160,18 @@ class JsonRpcHandler:
         """
         protocol_version = params.get("protocolVersion")
         capabilities = params.get("capabilities", {})
-
         return {
             "serverInfo": {
                 "name": "Mojentic MCP",
                 "version": version("mojentic-mcp")
             },
             "capabilities": {
-                "examineProvider": True
+                "tools": {
+                    "listChanged": False
+                }
             },
             "protocolVersion": protocol_version
         }
-
 
     def _handle_exit(self, params: Dict[str, Any]) -> None:
         """Handle the exit method.
@@ -214,7 +222,7 @@ class JsonRpcHandler:
         tool = next((t for t in self.tools if t.descriptor["function"]["name"] == tool_name), None)
 
         if tool is None:
-            raise JsonRpcError(-32601, f"Tool not found: {tool_name}")
+            raise JsonRpcError(JsonRpcErrorCode.METHOD_NOT_FOUND, f"Tool not found: {tool_name}")
 
         return tool.run(**tool_arguments)
 
