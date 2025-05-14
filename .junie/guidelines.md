@@ -1,4 +1,4 @@
-# Codebase Examiner - Agent Guidelines
+# Mojentic-MCP
 
 This file provides guidance to Junie when working with code in this repository.
 

@@ -8,8 +8,11 @@ from enum import IntEnum
 from importlib.metadata import version
 from typing import Dict, Any, Optional, List
 
+import structlog
 from mojentic.llm.tools.llm_tool import LLMTool
 from pydantic import BaseModel, Field
+
+logger = structlog.get_logger()
 
 
 class JsonRpcErrorCode(IntEnum):
@@ -81,6 +84,8 @@ class JsonRpcHandler:
         method = request.method
         request_id = request.id
         params = request.params or {}
+
+        logger.info("Handling request", method=method, request_id=request_id, params=params)
 
         # Check if the method exists
         if method not in self.methods:
@@ -224,7 +229,7 @@ class JsonRpcHandler:
         if tool is None:
             raise JsonRpcError(JsonRpcErrorCode.METHOD_NOT_FOUND, f"Tool not found: {tool_name}")
 
-        return tool.run(**tool_arguments)
+        return tool.call_tool(**tool_arguments)
 
     def _handle_resources_list(self, params: Dict[str, Any]) -> Dict[str, Any]:
         """Handle the resources/list method.

@@ -1,7 +1,7 @@
 import logging
 import sys
 
-logging.basicConfig(level=logging.CRITICAL)
+logging.basicConfig(level=logging.INFO)
 
 from mojentic.llm.tools.current_datetime import CurrentDateTimeTool
 from mojentic.llm.tools.date_resolver import ResolveDateTool
