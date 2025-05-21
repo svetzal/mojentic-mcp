@@ -139,9 +139,9 @@ The library implements the following core JSON-RPC methods as specified by the M
 | **resources/list** | Lists available resources |
 | **prompts/list** | Lists available prompts |
 
-## Client-Side API (Planned)
+## Client-Side API
 
-The upcoming client-side API will allow developers to easily interact with MCP servers. It will support multiple transports (HTTP, STDIO) and provide an idiomatic Python interface for tool discovery and invocation.
+The client-side API allows developers to easily interact with MCP servers. It supports multiple transports (HTTP, STDIO) and provides an idiomatic Python interface for tool discovery and invocation.
 
 ### Initialization
 
