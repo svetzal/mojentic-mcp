@@ -57,7 +57,6 @@ nav:
     - Transports: api/transports.md
     - HTTP Server: api/http-server.md
     - STDIO Server: api/stdio-server.md
-    - LLMTool: api/llm-tool.md
 
 repo_name: svetzal/mojentic-mcp
 repo_url: https://github.com/svetzal/mojentic-mcp

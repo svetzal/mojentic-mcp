@@ -128,6 +128,7 @@ class DescribeSmartMemory:
 - Markdown files
     - Use `#` for top-level headings
     - Put blank lines above and below bulleted lists, numbered lists, headings, quotations, and code blocks
+- Always keep the navigation tree in `mkdocs.yml` up to date with changes to the available documents in the `docs` folder
 
 ### API Documentation
 
