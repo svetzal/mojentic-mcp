@@ -1,6 +1,6 @@
 [project]
 name = "mojentic-mcp"
-version = "0.5.0"
+version = "0.6.0"
 authors = [
     { name = "Stacey Vetzal", email = "stacey@vetzal.com" },
 ]
@@ -24,6 +24,7 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
     "pytest>=7.0.0",
+    "pytest-spec",
     "pytest-cov",
     "pytest-mock>=3.10.0",
     "flake8>=6.0.0",

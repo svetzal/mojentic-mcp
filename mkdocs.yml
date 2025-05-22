@@ -44,6 +44,20 @@ markdown_extensions:
 
 nav:
   - Home: index.md
+  - Tutorials:
+    - Overview: tutorials/index.md
+    - HTTP Server: tutorials/http-server.md
+    - STDIO Server: tutorials/stdio-server.md
+    - Creating Custom Tools: tutorials/custom-tools.md
+    - Client Usage: tutorials/client-usage.md
+    - Multi-Transport Client: tutorials/multi-transport.md
+  - API Reference:
+    - Overview: api/index.md
+    - Client: api/client.md
+    - Transports: api/transports.md
+    - HTTP Server: api/http-server.md
+    - STDIO Server: api/stdio-server.md
+    - LLMTool: api/llm-tool.md
 
 repo_name: svetzal/mojentic-mcp
 repo_url: https://github.com/svetzal/mojentic-mcp
