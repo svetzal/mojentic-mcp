@@ -172,7 +172,7 @@ forecast_result = client.tools.get_weather_forecast(location="New York", days=3)
 
 ## 📚 Documentation
 
-Visit [the documentation](https://svetzal.github.io/mojentic/) for comprehensive guides, API reference, and examples.
+Visit [the documentation](https://svetzal.github.io/mojentic-mcp/) for comprehensive guides, API reference, and examples.
 
 ## 📄 License
 
