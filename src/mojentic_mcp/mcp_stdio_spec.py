@@ -7,10 +7,8 @@ from mojentic_mcp.rpc import JsonRpcHandler
 
 
 class DescribeStdioMcpServer:
-    """Tests for the StdioMcpServer class."""
 
     def setup_method(self, method):
-        """Set up test fixtures."""
         self.mock_rpc_handler = Mock(spec=JsonRpcHandler)
         self.mock_rpc_handler.should_exit = False
         self.server = StdioMcpServer(self.mock_rpc_handler)
@@ -18,8 +16,6 @@ class DescribeStdioMcpServer:
         self.mock_stdin = StringIO()
 
     def it_should_handle_initialize_request(self):
-        """Test handling of initialize request with protocol version 2025-03-26."""
-        # Prepare the initialize request
         initialize_request = {
             "jsonrpc": "2.0",
             "id": 1,
@@ -30,7 +26,6 @@ class DescribeStdioMcpServer:
             }
         }
 
-        # Mock the RPC handler response
         mock_response = {
             "jsonrpc": "2.0",
             "id": 1,
@@ -72,7 +67,6 @@ class DescribeStdioMcpServer:
         assert response_json["result"]["serverInfo"]["version"] == "0.1.0"
 
     def it_should_handle_tools_list_request(self):
-        """Test handling of tools/list request."""
         # Prepare the tools/list request
         tools_list_request = {
             "jsonrpc": "2.0",
@@ -125,7 +119,6 @@ class DescribeStdioMcpServer:
         assert "description" in examine_tool
 
     def it_should_handle_tools_call_examine_request(self):
-        """Test handling of tools/call request for the examine tool."""
         # Prepare the tools/call request
         tools_call_request = {
             "jsonrpc": "2.0",
@@ -177,7 +170,6 @@ class DescribeStdioMcpServer:
         assert "modules_found" in response_json["result"]
 
     def it_should_handle_legacy_examine_request(self):
-        """Test handling of legacy examine request."""
         # Prepare the legacy examine request
         legacy_request = {
             "command": "examine",
