@@ -145,6 +145,8 @@ eg.
 
 Always use the same `show_root_heading`, `merge_init_into_class`, and `group_by_category` options. Adjust the module and class name after the `:::` as needed.
 
+The `:::` directives produce their own linkable headlines, do not create additional headlines around those blocks.
+
 ## Release Process
 
 This project follows [Semantic Versioning](https://semver.org/) (SemVer) for version numbering. The version format is MAJOR.MINOR.PATCH, where:

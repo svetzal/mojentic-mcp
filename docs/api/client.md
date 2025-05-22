@@ -18,16 +18,14 @@ with McpClient(transports=[http_transport, stdio_transport]) as client:
     tools = client.list_tools()
     for tool in tools:
         print(f"Tool: {tool['name']} - {tool.get('description', 'No description')}")
-    
+
     # Call a tool with parameters
     result = client.call_tool("some_tool", param="value")
-    
+
     # Using the dynamic accessor
     current_time = client.tools.current_datetime()
     resolved_date = client.tools.resolve_date(date_string="next Friday")
 ```
-
-## API Reference
 
 ::: mojentic_mcp.client.McpClient
     options:
@@ -40,8 +38,6 @@ with McpClient(transports=[http_transport, stdio_transport]) as client:
         show_root_heading: true
         merge_init_into_class: false
         group_by_category: false
-
-## Exception Classes
 
 ::: mojentic_mcp.client.McpClientError
     options:

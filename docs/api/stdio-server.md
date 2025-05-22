@@ -2,139 +2,17 @@
 
 The Mojentic MCP library provides a STDIO server implementation for exposing MCP functionality over standard input/output (STDIO).
 
-## Class: StdioMcpServer
+::: mojentic_mcp.mcp_stdio.StdioMcpServer
+    options:
+        show_root_heading: true
+        merge_init_into_class: false
+        group_by_category: false
 
-```python
-from mojentic_mcp.mcp_stdio import StdioMcpServer
-from mojentic_mcp.rpc import JsonRpcHandler
-
-server = StdioMcpServer(rpc_handler=JsonRpcHandler(tools=[...]))
-```
-
-`StdioMcpServer` is a class that creates a server for handling MCP requests over STDIO using JSON-RPC.
-
-### Constructor
-
-```python
-def __init__(self, rpc_handler: JsonRpcHandler)
-```
-
-Creates a new StdioMcpServer instance.
-
-**Parameters:**
-- `rpc_handler`: A JsonRpcHandler instance that will handle the JSON-RPC requests.
-
-**Example:**
-```python
-from mojentic.llm.tools.current_datetime import CurrentDateTimeTool
-from mojentic_mcp.mcp_stdio import StdioMcpServer
-from mojentic_mcp.rpc import JsonRpcHandler
-
-# Create a JSON-RPC handler with tools
-rpc_handler = JsonRpcHandler(tools=[CurrentDateTimeTool()])
-
-# Create a STDIO MCP server
-server = StdioMcpServer(rpc_handler)
-```
-
-### Methods
-
-#### run
-
-```python
-def run(self) -> None
-```
-
-Runs the STDIO MCP server loop, reading requests from standard input and writing responses to standard output.
-
-**Example:**
-```python
-# Run the server
-server.run()
-```
-
-#### _read_request
-
-```python
-def _read_request(self) -> Dict[str, Any]
-```
-
-Reads a JSON request from standard input.
-
-**Returns:**
-- A dictionary containing the parsed JSON request.
-
-**Note:** This method is typically not called directly but is used internally by the `run` method.
-
-#### _write_response
-
-```python
-def _write_response(self, response: Dict[str, Any]) -> None
-```
-
-Writes a JSON response to standard output.
-
-**Parameters:**
-- `response`: The response to write.
-
-**Note:** This method is typically not called directly but is used internally by the `run` method.
-
-#### _write_info
-
-```python
-def _write_info(self, message: str, status: Optional[str] = "info") -> None
-```
-
-Writes an informational message to standard error.
-
-**Parameters:**
-- `message`: The message to write.
-- `status` (optional): The status to include in the message. Default is "info".
-
-**Note:** This method is typically not called directly but is used internally by the `run` method.
-
-#### _handle_request
-
-```python
-def _handle_request(self, request: Dict[str, Any]) -> Dict[str, Any]
-```
-
-Handles a single request.
-
-**Parameters:**
-- `request`: The request to handle.
-
-**Returns:**
-- A dictionary containing the response.
-
-**Note:** This method is typically not called directly but is used internally by the `run` method.
-
-## Function: start_server
-
-```python
-from mojentic_mcp.mcp_stdio import start_server
-from mojentic_mcp.rpc import JsonRpcHandler
-
-start_server(rpc_handler=JsonRpcHandler(tools=[...]))
-```
-
-`start_server` is a convenience function that creates and runs a StdioMcpServer.
-
-**Parameters:**
-- `rpc_handler`: The JSON-RPC handler to use.
-
-**Example:**
-```python
-from mojentic.llm.tools.current_datetime import CurrentDateTimeTool
-from mojentic_mcp.mcp_stdio import start_server
-from mojentic_mcp.rpc import JsonRpcHandler
-
-# Create a JSON-RPC handler with tools
-rpc_handler = JsonRpcHandler(tools=[CurrentDateTimeTool()])
-
-# Start the server
-start_server(rpc_handler=rpc_handler)
-```
+::: mojentic_mcp.mcp_stdio.start_server
+    options:
+        show_root_heading: true
+        merge_init_into_class: false
+        group_by_category: false
 
 ## Communication Protocol
 

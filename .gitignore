@@ -10,5 +10,6 @@ mojentic-mcp.egg-info
 .vscode
 .DS_Store
 /coverage.xml
-/junit/test-results.xml
 /src/mojentic_mcp.egg-info/
+junit
+htmlcov
