@@ -1,6 +1,6 @@
 [project]
 name = "mojentic-mcp"
-version = "0.5.0"
+version = "0.6.0"
 authors = [
     { name = "Stacey Vetzal", email = "stacey@vetzal.com" },
 ]
@@ -18,14 +18,20 @@ dependencies = [
     "structlog",
     "fastapi",
     "uvicorn",
+    "httpx",
 ]
 
 [project.optional-dependencies]
 dev = [
     "pytest>=7.0.0",
+    "pytest-spec",
     "pytest-cov",
     "pytest-mock>=3.10.0",
     "flake8>=6.0.0",
+    "mkdocs",
+    "mkdocstrings[python]",
+    "griffe-fieldz",
+    "mkdocs-material",
 ]
 
 [build-system]
@@ -36,5 +42,5 @@ build-backend = "setuptools.build_meta"
 where = ["src"]
 
 [project.urls]
-Homepage = "https://github.com/mojility/mojentic-mcp"
-Issues = "https://github.com/mojility/mojentic-mcp/issues"
+Homepage = "https://github.com/svetzal/mojentic-mcp"
+Issues = "https://github.com/svetzal/mojentic-mcp/issues"

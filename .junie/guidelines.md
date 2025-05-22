@@ -114,6 +114,20 @@ class DescribeSmartMemory:
         assert isinstance(memory, SmartMemory)
         assert memory.chroma == mock_chroma_gateway
 ```
+## Documentation
+
+- Built with MkDocs and Material theme
+- API documentation uses mkdocstrings
+- Supports mermaid.js diagrams in markdown files:
+  ```mermaid
+  graph LR
+      A[Doc] --> B[Feature]
+  ```
+- Build docs locally: `mkdocs serve`
+- Build for production: `mkdocs build`
+- Markdown files
+    - Use `#` for top-level headings
+    - Put blank lines above and below bulleted lists, numbered lists, headings, quotations, and code blocks
 
 ## Release Process
 

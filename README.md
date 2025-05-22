@@ -5,21 +5,21 @@ Mojentic MCP is a library providing MCP (Machine Conversation Protocol) server a
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 
-## Features
+## 🚀 Features
 
 - **HTTP Transport**: Expose the MCP protocol over HTTP using FastAPI
 - **STDIO Transport**: Expose the MCP protocol over standard input/output
 - **JSON-RPC 2.0 Handler**: Handle standard MCP requests and responses
 - **Tool Integration**: Easily expose custom tools to AI assistants
-- **MCP Protocol Support**: Implements the core MCP protocol methods
+- **MCP Protocol Support**: Implements the core MCP protocol methods. Currently, the primary focus is on the `tools` capabilities (`tools/list`, `tools/call`). Other methods like `resources/list` and `prompts/list` are stubbed to return empty lists for broader MCP compatibility.
 
-## Installation
+## 🔧 Installation
 
 ```bash
 pip install mojentic-mcp
 ```
 
-## Quick Start
+## 🚦 Quick Start
 
 ### HTTP Server Example
 
@@ -67,7 +67,7 @@ server = StdioMcpServer(rpc_handler)
 server.run()
 ```
 
-## Creating Custom Tools
+## 🛠️ Creating Custom Tools
 
 You can create custom tools by extending the `LLMTool` class:
 
@@ -102,7 +102,7 @@ server = HttpMcpServer(rpc_handler)
 server.run()
 ```
 
-## Task Management Example
+## 📋 Task Management Example
 
 Create a set of related tools that share state:
 
@@ -127,9 +127,9 @@ server = HttpMcpServer(rpc_handler)
 server.run()
 ```
 
-## MCP Protocol Reference
+## 📚 MCP Protocol Reference
 
-The library implements the following core JSON-RPC methods as specified by the MCP protocol:
+The library implements the following core JSON-RPC methods as specified by the MCP protocol. While methods for `resources` and `prompts` are present for MCP compatibility (returning empty lists), the current implementation is focused on delivering robust `tools` functionality.
 
 | Method | Description |
 |--------|-------------|
@@ -139,6 +139,37 @@ The library implements the following core JSON-RPC methods as specified by the M
 | **resources/list** | Lists available resources |
 | **prompts/list** | Lists available prompts |
 
-## License
+## 🔌 Client-Side API
+
+The client-side API allows developers to easily interact with MCP servers. It supports multiple transports (HTTP, STDIO) and provides an idiomatic Python interface for tool discovery and invocation.
+
+### Initialization
+
+```python
+from mojentic_mcp.client import McpClient
+from mojentic_mcp.transports import HttpTransport, StdioTransport
+
+# Define one or more transports
+http_transport = HttpTransport(url="http://localhost:8080/jsonrpc")
+stdio_transport = StdioTransport(command="/usr/local/bin/my_mcp_server_command")
+
+# Initialize the client with a list of transports
+client = McpClient(transports=[http_transport, stdio_transport])
+```
+
+### Tool Invocation
+
+Tools will be accessible as methods on a `tools` attribute of the client object:
+
+```python
+# List available tools (aggregated from all transports)
+tools_list = client.list_tools()
+
+# Invoke a tool (client determines the correct transport)
+resolved_date_result = client.tools.resolve_date(date_string="next Monday")
+forecast_result = client.tools.get_weather_forecast(location="New York", days=3)
+```
+
+## 📄 License
 
 This project is licensed under the MIT License - see the LICENSE file for details.

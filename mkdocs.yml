@@ -1,0 +1,63 @@
+site_name: Mojentic
+theme:
+  name: material
+  features:
+    - content.code.copy
+    - content.code.select
+  palette:
+    primary: custom
+    accent: custom
+  custom_dir: docs/overrides
+  logo: assets/mojility_favicon.png
+  favicon: assets/mojility_favicon.png
+plugins:
+  - search
+  - autorefs
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [ "src" ]
+          import:
+            - https://docs.python.org/3/objects.inv
+            - https://docs.pydantic.dev/latest/objects.inv
+            - https://jcristharif.com/msgspec//objects.inv
+          options:
+            docstring_style: "numpy"
+            heading_level: 1
+            annotations_path: brief
+            extensions:
+              - griffe_fieldz
+      enable_inventory: true
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+
+nav:
+  - Home: index.md
+  - Tutorials:
+    - Overview: tutorials/index.md
+    - HTTP Server: tutorials/http-server.md
+    - STDIO Server: tutorials/stdio-server.md
+    - Creating Custom Tools: tutorials/custom-tools.md
+    - Client Usage: tutorials/client-usage.md
+    - Multi-Transport Client: tutorials/multi-transport.md
+  - API Reference:
+    - Overview: api/index.md
+    - Client: api/client.md
+    - Transports: api/transports.md
+    - HTTP Server: api/http-server.md
+    - STDIO Server: api/stdio-server.md
+    - LLMTool: api/llm-tool.md
+
+repo_name: svetzal/mojentic-mcp
+repo_url: https://github.com/svetzal/mojentic-mcp

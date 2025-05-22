@@ -229,7 +229,7 @@ class JsonRpcHandler:
         if tool is None:
             raise JsonRpcError(JsonRpcErrorCode.METHOD_NOT_FOUND, f"Tool not found: {tool_name}")
 
-        return tool.call_tool(**tool_arguments)
+        return tool.run(**tool_arguments)
 
     def _handle_resources_list(self, params: Dict[str, Any]) -> Dict[str, Any]:
         """Handle the resources/list method.
