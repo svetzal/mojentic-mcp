@@ -1,4 +1,3 @@
-\
 import abc
 import json
 import subprocess
@@ -134,7 +133,7 @@ class StdioTransport(McpTransport):
                 try:
                     exit_request = JsonRpcRequest(jsonrpc="2.0", id=self._request_id_counter, method="exit", params={})
                     self._request_id_counter +=1
-                    self._process.stdin.write(json.dumps(exit_request.model_dump(exclude_none=True)) + \'\'\'\\n\'\'\')
+                    self._process.stdin.write(json.dumps(exit_request.model_dump(exclude_none=True)) + "\n")
                     self._process.stdin.flush()
                     self._process.stdin.close() # Close stdin to signal no more input
                 except Exception:
@@ -177,7 +176,7 @@ class StdioTransport(McpTransport):
             logger.debug("Sending STDIO request", payload=request_payload_str, pid=self._process.pid)
 
             try:
-                self._process.stdin.write(request_payload_str + \'\'\'\\n\'\'\')
+                self._process.stdin.write(request_payload_str + "\n")
                 self._process.stdin.flush()
 
                 response_line = self._process.stdout.readline()
@@ -219,4 +218,3 @@ class StdioTransport(McpTransport):
             except Exception as e:
                 logger.error("Error during STDIO communication", pid=self._process.pid if self._process else "N/A", exc_info=True)
                 raise McpTransportError(f"STDIO communication error: {e}") from e
-

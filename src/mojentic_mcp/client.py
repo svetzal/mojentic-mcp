@@ -1,5 +1,5 @@
-\
 from typing import Any, Callable, Dict, List, Optional, Tuple, Set
+import json
 
 import structlog
 
@@ -214,4 +214,3 @@ class McpToolExecutionError(McpClientError):
     def __init__(self, message: str, tool_result_payload: Dict[str, Any]):
         super().__init__(message)
         self.tool_result_payload = tool_result_payload
-
