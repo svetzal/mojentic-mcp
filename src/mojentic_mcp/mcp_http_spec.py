@@ -17,7 +17,7 @@ class DescribeHttpMcpServer:
         self.server = HttpMcpServer(self.mock_rpc_handler)
         self.client = TestClient(self.server.app)
 
-    def it_should_handle_jsonrpc_initialize_request(self):
+    def should_handle_jsonrpc_initialize_request(self):
         """Test handling of JSON-RPC initialize request."""
         # Prepare the initialize request
         initialize_request = {
@@ -63,7 +63,7 @@ class DescribeHttpMcpServer:
         assert "capabilities" in response_json["result"]
         assert response_json["result"]["protocolVersion"] == "2025-03-26"
 
-    def it_should_handle_jsonrpc_tools_list_request(self):
+    def should_handle_jsonrpc_tools_list_request(self):
         """Test handling of JSON-RPC tools/list request."""
         # Prepare the tools/list request
         tools_list_request = {
@@ -104,7 +104,7 @@ class DescribeHttpMcpServer:
         assert isinstance(response_json["result"]["tools"], list)
         assert len(response_json["result"]["tools"]) > 0
 
-    def it_should_handle_jsonrpc_tools_call_examine_request(self):
+    def should_handle_jsonrpc_tools_call_examine_request(self):
         """Test handling of JSON-RPC tools/call request for the examine tool."""
         # Prepare the tools/call request
         tools_call_request = {
@@ -151,7 +151,7 @@ class DescribeHttpMcpServer:
         assert "modules_found" in response_json["result"]
 
 
-    def it_should_handle_jsonrpc_invalid_json(self):
+    def should_handle_jsonrpc_invalid_json(self):
         """Test handling of invalid JSON in JSON-RPC request."""
         # Send an invalid JSON request
         response = self.client.post(

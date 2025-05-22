@@ -17,7 +17,7 @@ class DescribeHttpTransport:
         mock_gateway.post.return_value = {"jsonrpc": "2.0", "id": 1, "result": "success"}
         return mock_gateway
 
-    def it_should_be_instantiatable_with_url_and_timeout(self):
+    def should_be_instantiatable_with_url_and_timeout(self):
         transport = HttpTransport(url="http://example.com/mcp", timeout=60.0)
 
         assert isinstance(transport, HttpTransport)
@@ -25,7 +25,7 @@ class DescribeHttpTransport:
         assert transport._timeout == 60.0
         assert isinstance(transport._http_gateway, HttpClientGateway)
 
-    def it_should_be_instantiatable_with_host_port_and_path(self):
+    def should_be_instantiatable_with_host_port_and_path(self):
         transport = HttpTransport(host="example.com", port=8080, path="/custom", timeout=60.0)
 
         assert isinstance(transport, HttpTransport)
@@ -33,7 +33,7 @@ class DescribeHttpTransport:
         assert transport._timeout == 60.0
         assert isinstance(transport._http_gateway, HttpClientGateway)
 
-    def it_should_be_instantiatable_with_host_and_port_using_default_path(self):
+    def should_be_instantiatable_with_host_and_port_using_default_path(self):
         transport = HttpTransport(host="example.com", port=8080)
 
         assert isinstance(transport, HttpTransport)
@@ -41,11 +41,11 @@ class DescribeHttpTransport:
         assert transport._timeout == 30.0
         assert isinstance(transport._http_gateway, HttpClientGateway)
 
-    def it_should_raise_error_if_neither_url_nor_host_port_provided(self):
+    def should_raise_error_if_neither_url_nor_host_port_provided(self):
         with pytest.raises(ValueError, match="Either url or both host and port must be provided"):
             HttpTransport()
 
-    def it_should_initialize_and_shutdown_http_gateway(self, mock_http_gateway):
+    def should_initialize_and_shutdown_http_gateway(self, mock_http_gateway):
         transport = HttpTransport(url="http://example.com/mcp", http_gateway=mock_http_gateway)
 
         transport.initialize()
@@ -54,13 +54,13 @@ class DescribeHttpTransport:
         transport.shutdown()
         mock_http_gateway.shutdown.assert_called_once()
 
-    def it_should_work_as_context_manager(self, mock_http_gateway):
+    def should_work_as_context_manager(self, mock_http_gateway):
         with HttpTransport(url="http://example.com/mcp", http_gateway=mock_http_gateway) as transport:
             mock_http_gateway.initialize.assert_called_once()
 
         mock_http_gateway.shutdown.assert_called_once()
 
-    def it_should_send_request_and_receive_response(self, mock_http_gateway):
+    def should_send_request_and_receive_response(self, mock_http_gateway):
         expected_response = {"jsonrpc": "2.0", "id": 1, "result": "success"}
         mock_http_gateway.post.return_value = expected_response
 
@@ -76,7 +76,7 @@ class DescribeHttpTransport:
             {"jsonrpc": "2.0", "id": 1, "method": "test", "params": {"key": "value"}}
         )
 
-    def it_should_raise_mcp_transport_error_if_client_not_initialized(self, mocker):
+    def should_raise_mcp_transport_error_if_client_not_initialized(self, mocker):
         mock_gateway = Mock(spec=HttpClientGateway)
         mock_gateway.post.side_effect = RuntimeError("HTTP client not initialized. Call initialize() first.")
 
@@ -86,7 +86,7 @@ class DescribeHttpTransport:
         with pytest.raises(McpTransportError, match="HTTP client not initialized"):
             transport.send_request(request)
 
-    def it_should_raise_json_rpc_error_if_server_returns_rpc_error(self, mock_http_gateway):
+    def should_raise_json_rpc_error_if_server_returns_rpc_error(self, mock_http_gateway):
         error_response = {"jsonrpc": "2.0", "id": 1, "error": {"code": -32601, "message": "Method not found"}}
         mock_http_gateway.post.return_value = error_response
 
@@ -101,7 +101,7 @@ class DescribeHttpTransport:
         error_msg = str(exc_info.value)
         assert "Method not found" in error_msg
 
-    def it_should_raise_mcp_transport_error_on_http_error(self, mock_http_gateway):
+    def should_raise_mcp_transport_error_on_http_error(self, mock_http_gateway):
         # Configure the mock to raise an exception when post is called
         mock_http_gateway.post.side_effect = Exception("HTTP error: 404 - Not Found")
 
@@ -124,14 +124,14 @@ class DescribeStdioTransport:
         mock_gateway.read_line.return_value = json.dumps({"jsonrpc": "2.0", "id": 1, "result": "stdio_success"})
         return mock_gateway
 
-    def it_should_be_instantiated(self):
+    def should_be_instantiated(self):
         transport = StdioTransport(command=["my_server_cmd", "--arg"])
         assert isinstance(transport, StdioTransport)
         assert transport._command == ["my_server_cmd", "--arg"]
         assert isinstance(transport._stdio_gateway, StdioGateway)
         assert transport._pid is None
 
-    def it_should_initialize_and_shutdown_subprocess_correctly(self, mock_stdio_gateway):
+    def should_initialize_and_shutdown_subprocess_correctly(self, mock_stdio_gateway):
         transport = StdioTransport(command=["my_server"], stdio_gateway=mock_stdio_gateway)
 
         with transport: # Uses __enter__ and __exit__
@@ -145,7 +145,7 @@ class DescribeStdioTransport:
         assert transport._pid is None
 
 
-    def it_should_send_request_and_receive_response_via_stdio(self, mock_stdio_gateway):
+    def should_send_request_and_receive_response_via_stdio(self, mock_stdio_gateway):
         expected_response_json = {"jsonrpc": "2.0", "id": 1, "result": "stdio_success"}
         mock_stdio_gateway.read_line.return_value = json.dumps(expected_response_json)
 
@@ -163,7 +163,7 @@ class DescribeStdioTransport:
             expected_payload = json.dumps({"jsonrpc": "2.0", "id": 1, "method": "test_stdio", "params": {"key": "val"}})
             mock_stdio_gateway.write_line.assert_called_with(expected_payload)
 
-    def it_should_raise_mcp_transport_error_if_stdio_command_not_found(self, mocker):
+    def should_raise_mcp_transport_error_if_stdio_command_not_found(self, mocker):
         mock_gateway = Mock(spec=StdioGateway)
         mock_gateway.start_process.side_effect = FileNotFoundError("Command 'nonexistent' not found")
 
@@ -171,7 +171,7 @@ class DescribeStdioTransport:
         with pytest.raises(McpTransportError, match="Command not found: nonexistent"):
             transport.initialize() # or with transport:
 
-    def it_should_raise_mcp_transport_error_on_broken_pipe_during_send(self, mock_stdio_gateway):
+    def should_raise_mcp_transport_error_on_broken_pipe_during_send(self, mock_stdio_gateway):
         # Configure the mock to raise BrokenPipeError when write_line is called
         mock_stdio_gateway.write_line.side_effect = BrokenPipeError("Broken pipe")
         mock_stdio_gateway.get_stderr_output.return_value = "Some error output"
@@ -187,7 +187,7 @@ class DescribeStdioTransport:
             assert "Broken pipe with STDIO process" in error_msg
             assert "Some error output" in error_msg
 
-    def it_should_raise_json_rpc_error_if_stdio_server_returns_rpc_error(self, mock_stdio_gateway):
+    def should_raise_json_rpc_error_if_stdio_server_returns_rpc_error(self, mock_stdio_gateway):
         error_payload = {"code": -32601, "message": "Method Not Found via STDIO"}
 
         # Configure the mock to return an error response
@@ -205,7 +205,7 @@ class DescribeStdioTransport:
             error_msg = str(exc_info.value)
             assert "Method Not Found via STDIO" in error_msg
 
-    def it_should_assign_and_use_request_id_if_not_provided(self, mock_stdio_gateway):
+    def should_assign_and_use_request_id_if_not_provided(self, mock_stdio_gateway):
         # Configure the mock to return different responses for different calls
         responses = [
             json.dumps({"jsonrpc": "2.0", "id": 1, "result": "success_auto_id"}),
@@ -237,7 +237,7 @@ class DescribeStdioTransport:
             # Check that the write_line method was called with the expected payload
             mock_stdio_gateway.write_line.assert_called_with(json.dumps({"jsonrpc": "2.0", "id": 2, "method": "test2"}))
 
-    def it_should_raise_error_if_process_not_running_on_send(self, mock_stdio_gateway):
+    def should_raise_error_if_process_not_running_on_send(self, mock_stdio_gateway):
         # Configure the mock to report that the process is not running
         mock_stdio_gateway.is_process_running.return_value = False
 

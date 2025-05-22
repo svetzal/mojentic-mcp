@@ -30,7 +30,7 @@ def mock_tool():
 class DescribeJsonRpcHandler:
     """Tests for the JsonRpcHandler class."""
 
-    def it_should_be_instantiated(self, mock_tool):
+    def should_be_instantiated(self, mock_tool):
         """Test that JsonRpcHandler can be instantiated."""
         handler = JsonRpcHandler(tools=[mock_tool])
 
@@ -39,7 +39,7 @@ class DescribeJsonRpcHandler:
         assert len(handler.methods) > 0
         assert handler.tools == [mock_tool]
 
-    def it_should_handle_initialize_request(self, mock_tool):
+    def should_handle_initialize_request(self, mock_tool):
         """Test handling of initialize request."""
         handler = JsonRpcHandler(tools=[mock_tool])
         request = JsonRpcRequest(
@@ -61,7 +61,7 @@ class DescribeJsonRpcHandler:
         assert "capabilities" in response["result"]
         assert response["result"]["protocolVersion"] == "2025-03-26"
 
-    def it_should_handle_tools_list_request(self, mock_tool):
+    def should_handle_tools_list_request(self, mock_tool):
         """Test handling of tools/list request."""
         handler = JsonRpcHandler(tools=[mock_tool])
         request = JsonRpcRequest(
@@ -85,7 +85,7 @@ class DescribeJsonRpcHandler:
         assert examine_tool["name"] == "examine"
         assert "description" in examine_tool
 
-    def it_should_handle_tools_call_examine_request(self, mock_tool):
+    def should_handle_tools_call_examine_request(self, mock_tool):
         """Test handling of tools/call request for the examine tool."""
         handler = JsonRpcHandler(tools=[mock_tool])
         request = JsonRpcRequest(
@@ -118,7 +118,7 @@ class DescribeJsonRpcHandler:
         )
 
 
-    def it_should_handle_exit_request(self, mock_tool):
+    def should_handle_exit_request(self, mock_tool):
         """Test handling of exit request."""
         handler = JsonRpcHandler(tools=[mock_tool])
         request = JsonRpcRequest(
@@ -136,7 +136,7 @@ class DescribeJsonRpcHandler:
         assert response["result"] is None
         assert handler.should_exit is True
 
-    def it_should_handle_unknown_method(self, mock_tool):
+    def should_handle_unknown_method(self, mock_tool):
         """Test handling of unknown method."""
         handler = JsonRpcHandler(tools=[mock_tool])
         request = JsonRpcRequest(
@@ -155,7 +155,7 @@ class DescribeJsonRpcHandler:
         assert "Method not found" in response["error"]["message"]
 
 
-    def it_should_handle_tools_call_unknown_tool(self, mock_tool):
+    def should_handle_tools_call_unknown_tool(self, mock_tool):
         """Test handling of tools/call request for an unknown tool."""
         handler = JsonRpcHandler(tools=[mock_tool])
         request = JsonRpcRequest(
@@ -176,7 +176,7 @@ class DescribeJsonRpcHandler:
         assert response["error"]["code"] == JsonRpcErrorCode.METHOD_NOT_FOUND
         assert "Tool not found" in response["error"]["message"]
 
-    def it_should_handle_resources_list_request(self, mock_tool):
+    def should_handle_resources_list_request(self, mock_tool):
         """Test handling of resources/list request."""
         handler = JsonRpcHandler(tools=[mock_tool])
         request = JsonRpcRequest(
@@ -196,7 +196,7 @@ class DescribeJsonRpcHandler:
         assert len(response["result"]["resources"]) == 0
         assert response["result"]["nextCursor"] is None
 
-    def it_should_handle_prompts_list_request(self, mock_tool):
+    def should_handle_prompts_list_request(self, mock_tool):
         """Test handling of prompts/list request."""
         handler = JsonRpcHandler(tools=[mock_tool])
         request = JsonRpcRequest(

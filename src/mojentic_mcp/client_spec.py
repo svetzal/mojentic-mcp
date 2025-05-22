@@ -76,7 +76,7 @@ def mock_transport2(mock_transport_base, mocker): # Uses a new instance of mock_
 
 
 class DescribeMcpClient:
-    def it_should_be_instantiated_and_discover_tools(self, mock_transport1):
+    def should_be_instantiated_and_discover_tools(self, mock_transport1):
         client = McpClient(transports=[mock_transport1])
         
         mock_transport1.initialize.assert_called_once()
@@ -88,11 +88,11 @@ class DescribeMcpClient:
         assert "shared_tool" in client._tool_to_transport_map
         assert client._tool_to_transport_map["tool_a"] == mock_transport1
 
-    def it_should_raise_value_error_if_no_transports_are_provided(self):
+    def should_raise_value_error_if_no_transports_are_provided(self):
         with pytest.raises(ValueError, match="At least one transport must be provided"):
             McpClient(transports=[])
 
-    def it_should_list_aggregated_tools_respecting_first_wins_for_clashes(self, mock_transport1, mock_transport2):
+    def should_list_aggregated_tools_respecting_first_wins_for_clashes(self, mock_transport1, mock_transport2):
         client = McpClient(transports=[mock_transport1, mock_transport2])
         
         tools = client.list_tools()
@@ -109,7 +109,7 @@ class DescribeMcpClient:
         assert client._tool_to_transport_map["shared_tool"] == mock_transport1
 
 
-    def it_should_get_tool_schema_for_known_tool(self, mock_transport1):
+    def should_get_tool_schema_for_known_tool(self, mock_transport1):
         client = McpClient(transports=[mock_transport1])
         schema_a = client.get_tool_schema("tool_a")
         assert schema_a is not None
@@ -118,7 +118,7 @@ class DescribeMcpClient:
 
         assert client.get_tool_schema("nonexistent_tool") is None
 
-    def it_should_call_tool_on_the_correct_transport(self, mock_transport1, mock_transport2, mocker):
+    def should_call_tool_on_the_correct_transport(self, mock_transport1, mock_transport2, mocker):
         client = McpClient(transports=[mock_transport1, mock_transport2])
 
         # Call tool_a (only on transport1)
@@ -147,12 +147,12 @@ class DescribeMcpClient:
         # This is harder to assert directly without inspecting all calls to transport2.send_request.
         # The side_effect in mock_transport2 would raise an error if it was called for shared_tool.
 
-    def it_should_raise_value_error_when_calling_an_unknown_tool(self, mock_transport1):
+    def should_raise_value_error_when_calling_an_unknown_tool(self, mock_transport1):
         client = McpClient(transports=[mock_transport1])
         with pytest.raises(ValueError, match="Tool 'unknown_tool' not found"):
             client.call_tool("unknown_tool", param="value")
 
-    def it_should_raise_mcp_tool_execution_error_if_tool_result_iserror_true(self, mock_transport1, mocker):
+    def should_raise_mcp_tool_execution_error_if_tool_result_iserror_true(self, mock_transport1, mocker):
         # Modify mock_transport1 to return isError: True for a specific tool
         erroring_tool_name = "error_maker"
         error_result_payload = {"content": [{"type": "text", "text": "It broke!"}], "isError": True}
@@ -174,19 +174,19 @@ class DescribeMcpClient:
             client.call_tool(erroring_tool_name)
         assert exc_info.value.tool_result_payload == error_result_payload
 
-    def it_should_shutdown_all_transports_on_client_shutdown(self, mock_transport1, mock_transport2):
+    def should_shutdown_all_transports_on_client_shutdown(self, mock_transport1, mock_transport2):
         client = McpClient(transports=[mock_transport1, mock_transport2])
         client.shutdown()
         mock_transport1.shutdown.assert_called_once()
         mock_transport2.shutdown.assert_called_once()
 
-    def it_should_function_as_a_context_manager(self, mock_transport1):
+    def should_function_as_a_context_manager(self, mock_transport1):
         with McpClient(transports=[mock_transport1]) as client:
             assert client is not None
             mock_transport1.initialize.assert_called_once() # From __init__
         mock_transport1.shutdown.assert_called_once() # From __exit__
         
-    def it_should_handle_transport_errors_gracefully_during_tool_discovery(self, mock_transport1, mocker):
+    def should_handle_transport_errors_gracefully_during_tool_discovery(self, mock_transport1, mocker):
         failing_transport = Mock(spec=McpTransport)
         failing_transport.initialize = Mock()
         failing_transport.send_request.side_effect = McpTransportError("Discovery failed on this one")
@@ -216,7 +216,7 @@ class DescribeToolAccessor:
         # This client will have tool_a, shared_tool (from T1), tool_b (from T2)
         return McpClient(transports=[mock_transport1, mock_transport2])
 
-    def it_should_allow_calling_discovered_tools_as_methods(self, client_for_accessor):
+    def should_allow_calling_discovered_tools_as_methods(self, client_for_accessor):
         # Mock the underlying call_tool to verify it's used correctly
         client_for_accessor.call_tool = Mock(return_value="Dynamic call successful!")
 
@@ -237,11 +237,11 @@ class DescribeToolAccessor:
         assert result_shared == "Dynamic call successful!"
         client_for_accessor.call_tool.assert_called_once_with("shared_tool")
 
-    def it_should_raise_attribute_error_for_unknown_tool_name(self, client_for_accessor):
+    def should_raise_attribute_error_for_unknown_tool_name(self, client_for_accessor):
         with pytest.raises(AttributeError, match="'McpClient.tools' has no attribute 'non_existent_tool'"):
             _ = client_for_accessor.tools.non_existent_tool
             
-    def it_should_have_docstring_from_tool_description_on_dynamic_method(self, mock_transport1):
+    def should_have_docstring_from_tool_description_on_dynamic_method(self, mock_transport1):
         client = McpClient(transports=[mock_transport1]) # tool_a description is "Tool A from T1"
         
         dynamic_tool_a_method = client.tools.tool_a

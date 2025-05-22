@@ -15,7 +15,7 @@ class DescribeStdioMcpServer:
         self.mock_stdout = StringIO()
         self.mock_stdin = StringIO()
 
-    def it_should_handle_initialize_request(self):
+    def should_handle_initialize_request(self):
         initialize_request = {
             "jsonrpc": "2.0",
             "id": 1,
@@ -66,7 +66,7 @@ class DescribeStdioMcpServer:
         assert response_json["result"]["protocolVersion"] == "2025-03-26"
         assert response_json["result"]["serverInfo"]["version"] == "0.1.0"
 
-    def it_should_handle_tools_list_request(self):
+    def should_handle_tools_list_request(self):
         # Prepare the tools/list request
         tools_list_request = {
             "jsonrpc": "2.0",
@@ -118,7 +118,7 @@ class DescribeStdioMcpServer:
         assert examine_tool is not None
         assert "description" in examine_tool
 
-    def it_should_handle_tools_call_examine_request(self):
+    def should_handle_tools_call_examine_request(self):
         # Prepare the tools/call request
         tools_call_request = {
             "jsonrpc": "2.0",
@@ -169,7 +169,7 @@ class DescribeStdioMcpServer:
         assert "documentation" in response_json["result"]
         assert "modules_found" in response_json["result"]
 
-    def it_should_handle_legacy_examine_request(self):
+    def should_handle_legacy_examine_request(self):
         # Prepare the legacy examine request
         legacy_request = {
             "command": "examine",
