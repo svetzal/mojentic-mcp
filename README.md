@@ -170,6 +170,10 @@ resolved_date_result = client.tools.resolve_date(date_string="next Monday")
 forecast_result = client.tools.get_weather_forecast(location="New York", days=3)
 ```
 
+## 📚 Documentation
+
+Visit [the documentation](https://svetzal.github.io/mojentic/) for comprehensive guides, API reference, and examples.
+
 ## 📄 License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
