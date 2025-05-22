@@ -40,7 +40,10 @@ from mojentic_mcp.rpc import JsonRpcHandler
 sys.stderr.write("Starting HTTP MCP server...\n")
 sys.stderr.write("Server ready to receive commands\n")
 rpc_handler = JsonRpcHandler(tools=[ResolveDateTool(), CurrentDateTimeTool()])
+# Create an HTTP MCP server with the default path ("/jsonrpc")
 server = HttpMcpServer(rpc_handler)
+# Or specify a custom path
+# server = HttpMcpServer(rpc_handler, path="/custom-path")
 server.run()
 ```
 
@@ -150,7 +153,13 @@ from mojentic_mcp.client import McpClient
 from mojentic_mcp.transports import HttpTransport, StdioTransport
 
 # Define one or more transports
+# You can initialize HttpTransport with a full URL:
 http_transport = HttpTransport(url="http://localhost:8080/jsonrpc")
+# Or with host, port, and an optional path (defaults to "/jsonrpc"):
+http_transport_alt = HttpTransport(host="localhost", port=8080)
+# Or with a custom path:
+http_transport_custom = HttpTransport(host="localhost", port=8080, path="/custom-path")
+
 stdio_transport = StdioTransport(command="/usr/local/bin/my_mcp_server_command")
 
 # Initialize the client with a list of transports

@@ -22,7 +22,12 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Create an HTTP transport pointing to a local MCP server
+# You can use either a full URL:
 http_transport = HttpTransport(url="http://localhost:8000/jsonrpc")
+# Or host and port (with default path "/jsonrpc"):
+# http_transport = HttpTransport(host="localhost", port=8000)
+# Or with a custom path:
+# http_transport = HttpTransport(host="localhost", port=8000, path="/custom-path")
 
 # Initialize the client with the transport
 with McpClient(transports=[http_transport]) as client:
@@ -31,7 +36,7 @@ with McpClient(transports=[http_transport]) as client:
     logger.info(f"Discovered {len(tools)} tools:")
     for tool in tools:
         logger.info(f"  - {tool['name']}: {tool.get('description', 'No description')}")
-    
+
     # Call a tool using the dynamic accessor
     current_time = client.tools.current_datetime()
     logger.info(f"Current datetime: {current_time}")
@@ -113,13 +118,13 @@ stdio_transport = StdioTransport(command=[sys.executable, stdio_server_path])
 with McpClient(transports=[stdio_transport]) as client:
     # The client will automatically start the server subprocess
     # and communicate with it over STDIO
-    
+
     # List all available tools
     tools = client.list_tools()
     print(f"Discovered {len(tools)} tools from STDIO server:")
     for tool in tools:
         print(f"  - {tool['name']}: {tool.get('description', 'No description')}")
-    
+
     # Call tools using the dynamic accessor
     current_time = client.tools.current_datetime()
     print(f"Current datetime: {current_time}")

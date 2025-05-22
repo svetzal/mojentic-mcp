@@ -16,13 +16,14 @@ server = HttpMcpServer(rpc_handler=JsonRpcHandler(tools=[...]))
 ### Constructor
 
 ```python
-def __init__(self, rpc_handler: JsonRpcHandler)
+def __init__(self, rpc_handler: JsonRpcHandler, path: str = "/jsonrpc")
 ```
 
 Creates a new HttpMcpServer instance.
 
 **Parameters:**
 - `rpc_handler`: A JsonRpcHandler instance that will handle the JSON-RPC requests.
+- `path` (optional): The path to serve the JSON-RPC endpoint on. Defaults to "/jsonrpc".
 
 **Example:**
 ```python
@@ -33,8 +34,11 @@ from mojentic_mcp.rpc import JsonRpcHandler
 # Create a JSON-RPC handler with tools
 rpc_handler = JsonRpcHandler(tools=[CurrentDateTimeTool()])
 
-# Create an HTTP MCP server
+# Create an HTTP MCP server with the default path ("/jsonrpc")
 server = HttpMcpServer(rpc_handler)
+
+# Or create an HTTP MCP server with a custom path
+# server = HttpMcpServer(rpc_handler, path="/custom-path")
 ```
 
 ### Methods
@@ -82,7 +86,7 @@ Handles JSON-RPC 2.0 requests. This method is registered as the handler for the 
 from mojentic_mcp.mcp_http import start_server
 from mojentic_mcp.rpc import JsonRpcHandler
 
-start_server(port=8080, rpc_handler=JsonRpcHandler(tools=[...]))
+start_server(port=8080, rpc_handler=JsonRpcHandler(tools=[...]), path="/jsonrpc")
 ```
 
 `start_server` is a convenience function that creates and runs an HttpMcpServer.
@@ -90,6 +94,7 @@ start_server(port=8080, rpc_handler=JsonRpcHandler(tools=[...]))
 **Parameters:**
 - `port`: The port to run the server on.
 - `rpc_handler`: The JSON-RPC handler to use.
+- `path` (optional): The path to serve the JSON-RPC endpoint on. Defaults to "/jsonrpc".
 
 **Example:**
 ```python
@@ -100,13 +105,16 @@ from mojentic_mcp.rpc import JsonRpcHandler
 # Create a JSON-RPC handler with tools
 rpc_handler = JsonRpcHandler(tools=[CurrentDateTimeTool()])
 
-# Start the server
+# Start the server with the default path ("/jsonrpc")
 start_server(port=8000, rpc_handler=rpc_handler)
+
+# Or start the server with a custom path
+# start_server(port=8000, rpc_handler=rpc_handler, path="/custom-path")
 ```
 
 ## JSON-RPC Endpoint
 
-The HTTP server exposes a single JSON-RPC endpoint at `/jsonrpc`. This endpoint accepts POST requests with JSON-RPC 2.0 payloads.
+The HTTP server exposes a single JSON-RPC endpoint. By default, this endpoint is at `/jsonrpc`, but it can be customized using the `path` parameter when creating the server. This endpoint accepts POST requests with JSON-RPC 2.0 payloads.
 
 ### Request Format
 

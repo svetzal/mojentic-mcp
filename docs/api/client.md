@@ -8,7 +8,10 @@ The `McpClient` class is the main client interface for interacting with MCP serv
 from mojentic_mcp.client import McpClient
 from mojentic_mcp.transports import HttpTransport
 
+# You can initialize HttpTransport with a full URL:
 client = McpClient(transports=[HttpTransport(url="http://localhost:8000/jsonrpc")])
+# Or with host and port (using default path "/jsonrpc"):
+# client = McpClient(transports=[HttpTransport(host="localhost", port=8000)])
 ```
 
 ### Constructor
@@ -28,7 +31,11 @@ from mojentic_mcp.client import McpClient
 from mojentic_mcp.transports import HttpTransport, StdioTransport
 
 # Create transports
+# HTTP transport can be initialized with a full URL:
 http_transport = HttpTransport(url="http://localhost:8000/jsonrpc")
+# Or with host and port:
+# http_transport = HttpTransport(host="localhost", port=8000)
+
 stdio_transport = StdioTransport(command=["python", "stdio_server.py"])
 
 # Create client with multiple transports
@@ -111,11 +118,11 @@ try:
     # Call a tool with no parameters
     current_time = client.call_tool("current_datetime")
     print(f"Current time: {current_time}")
-    
+
     # Call a tool with parameters
     resolved_date = client.call_tool("resolve_date", date_string="next Friday")
     print(f"Resolved date: {resolved_date}")
-    
+
     # Call a tool on a specific transport
     result = client.call_tool("some_tool", transport=http_transport, param="value")
 except McpClientError as e:

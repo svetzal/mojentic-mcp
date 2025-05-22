@@ -26,6 +26,26 @@ class DescribeHttpTransport:
         assert transport._timeout == 60.0
         assert transport._client is None
 
+    def it_should_be_instantiated_with_host_port_and_path(self):
+        transport = HttpTransport(host="example.com", port=8080, path="/custom", timeout=60.0)
+
+        assert isinstance(transport, HttpTransport)
+        assert transport._url == "http://example.com:8080/custom"
+        assert transport._timeout == 60.0
+        assert transport._client is None
+
+    def it_should_be_instantiated_with_host_and_port_using_default_path(self):
+        transport = HttpTransport(host="example.com", port=8080)
+
+        assert isinstance(transport, HttpTransport)
+        assert transport._url == "http://example.com:8080/jsonrpc"
+        assert transport._timeout == 30.0
+        assert transport._client is None
+
+    def it_should_raise_error_if_neither_url_nor_host_port_provided(self):
+        with pytest.raises(ValueError, match="Either url or both host and port must be provided"):
+            HttpTransport()
+
     def it_should_initialize_and_shutdown_httpx_client(self, mock_httpx_client):
         transport = HttpTransport(url="http://example.com/mcp")
 

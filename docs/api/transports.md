@@ -68,21 +68,30 @@ from mojentic_mcp.transports import HttpTransport
 ### Constructor
 
 ```python
-def __init__(self, url: str, timeout: float = 30.0)
+def __init__(self, url: str = None, host: str = None, port: int = None, path: str = "/jsonrpc", timeout: float = 30.0)
 ```
 
 Creates a new HttpTransport instance.
 
 **Parameters:**
-- `url`: The URL of the MCP server's JSON-RPC endpoint.
-- `timeout` (optional): The timeout for HTTP requests in seconds. Default is 30 seconds.
+- `url` (optional): The full URL to the JSON-RPC endpoint. If provided, this takes precedence over host, port, and path.
+- `host` (optional): The host to connect to. Required if url is not provided.
+- `port` (optional): The port to connect to. Required if url is not provided.
+- `path` (optional): The path to the JSON-RPC endpoint. Defaults to "/jsonrpc".
+- `timeout` (optional): The timeout for HTTP requests in seconds. Defaults to 30.0.
 
 **Example:**
 ```python
 from mojentic_mcp.transports import HttpTransport
 
-# Create an HTTP transport
+# Create an HTTP transport with a full URL
 http_transport = HttpTransport(url="http://localhost:8000/jsonrpc")
+
+# Create an HTTP transport with host and port (using default path "/jsonrpc")
+http_transport_host_port = HttpTransport(host="localhost", port=8000)
+
+# Create an HTTP transport with host, port, and custom path
+http_transport_custom_path = HttpTransport(host="localhost", port=8000, path="/custom-path")
 
 # Create an HTTP transport with a custom timeout
 http_transport_with_timeout = HttpTransport(url="http://localhost:8000/jsonrpc", timeout=60.0)
@@ -128,8 +137,10 @@ Sends a JSON-RPC request to the server over HTTP and returns the response.
 from mojentic_mcp.transports import HttpTransport
 from mojentic_mcp.rpc import JsonRpcRequest
 
-# Create an HTTP transport
+# Create an HTTP transport (using either a full URL or host/port)
 http_transport = HttpTransport(url="http://localhost:8000/jsonrpc")
+# Or:
+# http_transport = HttpTransport(host="localhost", port=8000)
 
 # Create a JSON-RPC request
 rpc_request = JsonRpcRequest(method="tools/list", params={})

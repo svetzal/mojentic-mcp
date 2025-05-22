@@ -12,17 +12,19 @@ from mojentic_mcp.rpc import JsonRpcHandler, JsonRpcRequest
 class HttpMcpServer:
     """An MCP server that communicates over HTTP using JSON-RPC."""
 
-    def __init__(self, rpc_handler: JsonRpcHandler):
+    def __init__(self, rpc_handler: JsonRpcHandler, path: str = "/jsonrpc"):
         """Initialize the HTTP MCP server.
 
         Args:
             rpc_handler (JsonRpcHandler): The JSON-RPC handler to use.
+            path (str, optional): The path to serve the JSON-RPC endpoint on. Defaults to "/jsonrpc".
         """
         self.rpc_handler = rpc_handler
+        self.path = path
         self.app = FastAPI(title="Codebase Examiner MCP", description="MCP server for examining Python codebases")
 
         # Register the JSON-RPC endpoint
-        self.app.post("/jsonrpc")(self.handle_jsonrpc)
+        self.app.post(self.path)(self.handle_jsonrpc)
 
     async def handle_jsonrpc(self, request: Request) -> Response:
         """Handle JSON-RPC 2.0 requests.
@@ -105,14 +107,15 @@ class HttpMcpServer:
         uvicorn.run(self.app, host=host, port=port)
 
 
-def start_server(port: int, rpc_handler: JsonRpcHandler):
+def start_server(port: int, rpc_handler: JsonRpcHandler, path: str = "/jsonrpc"):
     """Start the MCP server.
 
     Args:
         port (int): The port to run the server on
         rpc_handler (JsonRpcHandler): The JSON-RPC handler to use.
+        path (str, optional): The path to serve the JSON-RPC endpoint on. Defaults to "/jsonrpc".
     """
-    server = HttpMcpServer(rpc_handler)
+    server = HttpMcpServer(rpc_handler, path=path)
     server.run(port=port)
 
 

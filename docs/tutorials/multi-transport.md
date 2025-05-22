@@ -34,10 +34,15 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Create HTTP transport for a server with date tools
+# You can use either a full URL:
 http_transport1 = HttpTransport(url="http://localhost:8000/jsonrpc")
+# Or host and port (with default path "/jsonrpc"):
+# http_transport1 = HttpTransport(host="localhost", port=8000)
 
 # Create HTTP transport for a server with custom tools
 http_transport2 = HttpTransport(url="http://localhost:8001/jsonrpc")
+# Or with host and port:
+# http_transport2 = HttpTransport(host="localhost", port=8001)
 
 # Create STDIO transport for a server with additional tools
 script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -48,7 +53,7 @@ stdio_transport = StdioTransport(command=[sys.executable, stdio_server_path])
 with McpClient(transports=[http_transport1, http_transport2, stdio_transport]) as client:
     # The client will automatically discover tools from all transports
     # and provide a unified interface to call them
-    
+
     # List all available tools from all transports
     tools = client.list_tools()
     logger.info(f"Discovered {len(tools)} unique tools from all transports:")
@@ -124,8 +129,15 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Create transports for different servers
+# You can use either a full URL:
 http_transport1 = HttpTransport(url="http://localhost:8000/jsonrpc")  # Date tools
+# Or host and port:
+# http_transport1 = HttpTransport(host="localhost", port=8000)  # Date tools
+
+# Second transport for a different server
 http_transport2 = HttpTransport(url="http://localhost:8001/jsonrpc")  # User info tool
+# Or with host and port:
+# http_transport2 = HttpTransport(host="localhost", port=8001)  # User info tool
 script_dir = os.path.dirname(os.path.abspath(__file__))
 stdio_server_path = os.path.join(script_dir, "stdio_server.py")
 stdio_transport = StdioTransport(command=[sys.executable, stdio_server_path])  # Also date tools
@@ -137,22 +149,22 @@ with McpClient(transports=[http_transport1, http_transport2, stdio_transport]) a
     logger.info(f"Discovered {len(tools)} unique tools from all transports:")
     for tool in tools:
         logger.info(f"  - {tool['name']}: {tool.get('description', 'No description')}")
-    
+
     try:
         # Call date tools (from http_transport1, since it's first in the list)
         current_time = client.tools.current_datetime()
         logger.info(f"Current datetime: {current_time}")
-        
+
         resolved_date = client.tools.resolve_date(date_string="next Friday")
         logger.info(f"Resolved date: {resolved_date}")
-        
+
         # Call user info tool (from http_transport2)
         user_info = client.tools.colour_preferences()
         logger.info(f"User info: {user_info}")
-        
+
     except Exception as e:
         logger.error(f"Error calling tool: {e}")
-    
+
     # Demonstrate the "first-wins" approach
     logger.info("\nDemonstrating 'first-wins' for tool discovery:")
     for tool_name in ["current_datetime", "resolve_date", "colour_preferences"]:

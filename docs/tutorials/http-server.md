@@ -30,8 +30,10 @@ from mojentic_mcp.rpc import JsonRpcHandler
 # Create a JSON-RPC handler with the tools
 rpc_handler = JsonRpcHandler(tools=[ResolveDateTool(), CurrentDateTimeTool()])
 
-# Create an HTTP MCP server with the handler
+# Create an HTTP MCP server with the handler (using default path "/jsonrpc")
 server = HttpMcpServer(rpc_handler)
+# Or specify a custom path:
+# server = HttpMcpServer(rpc_handler, path="/custom-path")
 
 # Log that the server is starting
 sys.stderr.write("Starting HTTP MCP server...\n")
@@ -96,7 +98,10 @@ from mojentic_mcp.client import McpClient
 from mojentic_mcp.transports import HttpTransport
 
 # Create an HTTP transport pointing to the server
+# You can use either a full URL:
 http_transport = HttpTransport(url="http://localhost:8000/jsonrpc")
+# Or host and port (with default path "/jsonrpc"):
+# http_transport = HttpTransport(host="localhost", port=8000)
 
 # Initialize the client with the transport
 with McpClient(transports=[http_transport]) as client:
@@ -105,11 +110,11 @@ with McpClient(transports=[http_transport]) as client:
     print(f"Discovered {len(tools)} tools:")
     for tool in tools:
         print(f"  - {tool['name']}: {tool.get('description', 'No description')}")
-    
+
     # Call a tool
     current_time = client.tools.current_datetime()
     print(f"Current datetime: {current_time}")
-    
+
     resolved_date = client.tools.resolve_date(date_string="next Friday")
     print(f"Resolved date: {resolved_date}")
 ```

@@ -55,8 +55,26 @@ class McpTransportError(Exception):
 class HttpTransport(McpTransport):
     """MCP Transport using HTTP."""
 
-    def __init__(self, url: str, timeout: float = 30.0):
-        self._url = url
+    def __init__(self, url: str = None, host: str = None, port: int = None, path: str = "/jsonrpc", timeout: float = 30.0):
+        """Initialize the HTTP transport.
+
+        Args:
+            url (str, optional): The full URL to the JSON-RPC endpoint. If provided, this takes precedence over host, port, and path.
+            host (str, optional): The host to connect to. Required if url is not provided.
+            port (int, optional): The port to connect to. Required if url is not provided.
+            path (str, optional): The path to the JSON-RPC endpoint. Defaults to "/jsonrpc".
+            timeout (float, optional): The timeout for HTTP requests in seconds. Defaults to 30.0.
+
+        Raises:
+            ValueError: If neither url nor both host and port are provided.
+        """
+        if url:
+            self._url = url
+        elif host and port:
+            self._url = f"http://{host}:{port}{path}"
+        else:
+            raise ValueError("Either url or both host and port must be provided")
+
         self._timeout = timeout
         self._client: Optional[httpx.Client] = None
 
@@ -73,7 +91,7 @@ class HttpTransport(McpTransport):
     def send_request(self, rpc_request: JsonRpcRequest) -> Dict[str, Any]:
         if not self._client:
             raise McpTransportError("HTTP client not initialized. Call initialize() or use as context manager.")
-        
+
         request_payload = rpc_request.model_dump(exclude_none=True)
         logger.debug("Sending HTTP request", url=self._url, payload=request_payload)
         try:
@@ -146,7 +164,7 @@ class StdioTransport(McpTransport):
                 except subprocess.TimeoutExpired:
                     logger.warn("Stdio process did not terminate gracefully, killing.", pid=current_pid)
                     self._process.kill()
-            
+
             if self._process.stderr:
                 try:
                     for line in self._process.stderr: # Drain stderr
@@ -188,14 +206,14 @@ class StdioTransport(McpTransport):
                         pass
                     logger.error("No response from STDIO process", pid=self._process.pid, stderr="".join(stderr_output))
                     raise McpTransportError(f"No response from STDIO process (PID: {self._process.pid}) or process terminated.")
-                
+
                 logger.debug("Received STDIO response line", line=response_line.strip(), pid=self._process.pid)
                 response_json = json.loads(response_line)
 
                 if "error" in response_json:
                     err = response_json["error"]
                     raise JsonRpcError(code=err.get("code"), message=err.get("message"), data=err.get("data"))
-                
+
                 if rpc_request.id is not None and response_json.get("id") != rpc_request.id:
                     logger.warn("Received STDIO response with mismatched ID", 
                                 expected_id=rpc_request.id, actual_id=response_json.get("id"), pid=self._process.pid)

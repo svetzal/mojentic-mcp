@@ -16,7 +16,7 @@ Here's a typical workflow for using Mojentic MCP:
 
 1. Start the HTTP server in one terminal:
    ```bash
-   python -m src._examples.simple_http.py
+   python -m src._examples.simple_http_server.py
    ```
 
 2. Start the custom tool HTTP server in another terminal:

@@ -25,7 +25,7 @@ These examples demonstrate how to use the McpClient to interact with MCP servers
 
 Start an HTTP server:
 ```bash
-python -m src._examples.simple_http.py
+python -m src._examples.simple_http_server.py
 ```
 
 Start a custom tool HTTP server on a different port:
@@ -55,7 +55,7 @@ python -m src._examples.multi_transport_client_example
 
 1. Start the HTTP server in one terminal:
    ```bash
-   python -m src._examples.simple_http.py
+   python -m src._examples.simple_http_server.py
    ```
 
 2. Start the custom tool HTTP server in another terminal:
