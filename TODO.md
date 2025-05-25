@@ -30,6 +30,20 @@ This document lists the remaining changes needed to make our MCP implementation 
 - Implement proper pagination logic for the cursor parameter in `_handle_prompts_list`
 - Add the `nextCursor` field to the responses of these methods
 
+### 3. 2025-03-26 Specification Compliance
+- Update protocol version in initialize response to "2025-03-26"
+- Add support for the "annotations" field in tool definitions
+  - Update the tool schema to include optional annotations property
+  - Ensure annotations are properly passed through from tool definitions to responses
+- Add support for audio content type in tool results
+  - Implement handling for audio content with base64-encoded data and mimeType
+- Update pagination links in documentation to reference the 2025-03-26 version
+- Update resource links in documentation to reference the 2025-03-26 version
+- Add appropriate warnings about tool annotations being untrusted unless from trusted servers
+
 ## Implementation Priority
-1. Add support for notifications when the tool list changes
-2. Implement pagination for resources/list and prompts/list methods
+1. Update protocol version to 2025-03-26
+2. Add support for the "annotations" field in tool definitions
+3. Add support for audio content type in tool results
+4. Add support for notifications when the tool list changes
+5. Implement pagination for resources/list and prompts/list methods
