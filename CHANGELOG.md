@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.8.0] - 2024-05-25
+
+### Changed
+- Split dependencies so users can install only what they need:
+  - Base package has minimal dependencies
+  - `[client]` installs httpx for client functionality
+  - `[server]` installs fastapi and uvicorn for server functionality
+  - `[all]` installs all client and server dependencies
+  - `[dev]` continues to provide development dependencies
+
 ## [0.7.0] - 2023-11-27
 
 ### Added

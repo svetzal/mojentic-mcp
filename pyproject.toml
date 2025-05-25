@@ -1,6 +1,6 @@
 [project]
 name = "mojentic-mcp"
-version = "0.7.0"
+version = "0.8.0"
 authors = [
     { name = "Stacey Vetzal", email = "stacey@vetzal.com" },
 ]
@@ -16,12 +16,21 @@ classifiers = [
 dependencies = [
     "mojentic>=0.5.7",
     "structlog",
-    "fastapi",
-    "uvicorn",
-    "httpx",
 ]
 
 [project.optional-dependencies]
+client = [
+    "httpx",
+]
+server = [
+    "fastapi",
+    "uvicorn",
+]
+all = [
+    "httpx",
+    "fastapi", 
+    "uvicorn",
+]
 dev = [
     "pytest>=7.0.0",
     "pytest-spec",
