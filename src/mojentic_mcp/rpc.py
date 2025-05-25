@@ -70,6 +70,7 @@ class JsonRpcHandler:
             "tools/call": self._handle_tools_call,
             "resources/list": self._handle_resources_list,
             "prompts/list": self._handle_prompts_list,
+            "ping": self._handle_ping,
         }
 
     def handle_request(self, request: JsonRpcRequest) -> Dict[str, Any]:
@@ -197,19 +198,59 @@ class JsonRpcHandler:
             params (Dict[str, Any]): The method parameters
 
         Returns:
-            Dict[str, Any]: The result
+            Dict[str, Any]: The result with paginated tools list
         """
-        tools_list = []
+        cursor = params.get("cursor")
+        # Define page size for pagination
+        page_size = 10
+
+        # Get all tools
+        all_tools = []
         for tool in self.tools:
             descriptor = tool.descriptor
-            tools_list.append({
+            all_tools.append({
                 "name": descriptor["function"]["name"],
-                "description": descriptor["function"]["description"]
+                "description": descriptor["function"]["description"],
+                "inputSchema": descriptor["function"]["parameters"]
             })
 
-        return {
-            "tools": tools_list
+        # Handle pagination
+        start_index = 0
+        if cursor:
+            try:
+                # Parse the cursor to get the starting index
+                # In a real implementation, you might want to use a more secure method
+                # like encoding/decoding with a secret key
+                start_index = int(cursor)
+                if start_index < 0 or start_index >= len(all_tools):
+                    # Invalid cursor
+                    raise JsonRpcError(
+                        JsonRpcErrorCode.INVALID_PARAMS,
+                        "Invalid cursor value"
+                    )
+            except ValueError:
+                # Cursor is not a valid integer
+                raise JsonRpcError(
+                    JsonRpcErrorCode.INVALID_PARAMS,
+                    "Invalid cursor format"
+                )
+
+        # Calculate end index for this page
+        end_index = min(start_index + page_size, len(all_tools))
+
+        # Get the tools for this page
+        tools_page = all_tools[start_index:end_index]
+
+        # Determine if there are more results
+        result = {
+            "tools": tools_page
         }
+
+        # Only include nextCursor if there are more results
+        if end_index < len(all_tools):
+            result["nextCursor"] = str(end_index)
+
+        return result
 
     def _handle_tools_call(self, params: Dict[str, Any]) -> Dict[str, Any]:
         """Handle the tools/call method.
@@ -218,7 +259,7 @@ class JsonRpcHandler:
             params (Dict[str, Any]): The method parameters
 
         Returns:
-            Dict[str, Any]: The result
+            Dict[str, Any]: The result formatted according to MCP specification
         """
         tool_name = params.get("name")
         tool_arguments = params.get("arguments", {})
@@ -229,7 +270,30 @@ class JsonRpcHandler:
         if tool is None:
             raise JsonRpcError(JsonRpcErrorCode.METHOD_NOT_FOUND, f"Tool not found: {tool_name}")
 
-        return tool.run(**tool_arguments)
+        try:
+            result = tool.run(**tool_arguments)
+
+            # Convert the result to a content array with type information
+            if isinstance(result, str):
+                content = [{"type": "text", "text": result}]
+            elif isinstance(result, dict):
+                # Convert dictionary to a formatted string
+                import json
+                content = [{"type": "text", "text": json.dumps(result, indent=2)}]
+            else:
+                # Convert any other type to string
+                content = [{"type": "text", "text": str(result)}]
+
+            return {
+                "content": content,
+                "isError": False
+            }
+        except Exception as e:
+            # Handle errors by setting isError to true and providing an error message
+            return {
+                "content": [{"type": "text", "text": f"Error executing tool: {str(e)}"}],
+                "isError": True
+            }
 
     def _handle_resources_list(self, params: Dict[str, Any]) -> Dict[str, Any]:
         """Handle the resources/list method.
@@ -241,8 +305,7 @@ class JsonRpcHandler:
             Dict[str, Any]: The result with empty resources list
         """
         return {
-            "resources": [],
-            "nextCursor": None
+            "resources": []
         }
 
     def _handle_prompts_list(self, params: Dict[str, Any]) -> Dict[str, Any]:
@@ -255,6 +318,16 @@ class JsonRpcHandler:
             Dict[str, Any]: The result with empty prompts list
         """
         return {
-            "prompts": [],
-            "nextCursor": None
+            "prompts": []
         }
+
+    def _handle_ping(self, params: Dict[str, Any]) -> Dict[str, Any]:
+        """Handle the ping method.
+
+        Args:
+            params (Dict[str, Any]): The method parameters
+
+        Returns:
+            Dict[str, Any]: An empty response as per the ping specification
+        """
+        return {}

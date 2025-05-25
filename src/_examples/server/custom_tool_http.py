@@ -1,5 +1,4 @@
 import logging
-import sys
 
 from mojentic.llm.tools.llm_tool import LLMTool
 
@@ -32,13 +31,11 @@ class AboutTheUser(LLMTool):
         }
 
 
-sys.stderr.write("Starting STDIO MCP server...\n")
-sys.stderr.write("Server ready to receive commands on stdin\n")
 rpc_handler = JsonRpcHandler(tools=[
     AboutTheUser(),
 ])
+
 # Create an HTTP MCP server with the default path ("/jsonrpc")
 server = HttpMcpServer(rpc_handler)
-# Or specify a custom path:
-# server = HttpMcpServer(rpc_handler, path="/custom-path")
+
 server.run()
