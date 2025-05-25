@@ -1,6 +1,6 @@
 [project]
 name = "mojentic-mcp"
-version = "0.6.0"
+version = "0.7.0"
 authors = [
     { name = "Stacey Vetzal", email = "stacey@vetzal.com" },
 ]

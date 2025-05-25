@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.7.0] - 2023-11-27
+
+### Added
+- Improved tools/list method with inputSchema field and pagination support
+- Enhanced tools/call method with proper content array formatting and error handling
+- Implemented ping mechanism for connection health checks
+
 ## [0.6.0] - 2023-11-20
 
 ### Added
