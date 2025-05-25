@@ -30,11 +30,6 @@ With server functionality only:
 pip install "mojentic-mcp[server]"
 ```
 
-With all functionality:
-```bash
-pip install "mojentic-mcp[all]"
-```
-
 For development:
 ```bash
 pip install "mojentic-mcp[dev]"

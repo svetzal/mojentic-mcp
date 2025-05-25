@@ -26,11 +26,6 @@ server = [
     "fastapi",
     "uvicorn",
 ]
-all = [
-    "httpx",
-    "fastapi", 
-    "uvicorn",
-]
 dev = [
     "pytest>=7.0.0",
     "pytest-spec",
