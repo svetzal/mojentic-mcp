@@ -28,8 +28,9 @@ jobs:
 
       - name: Build release distributions
         run: |
-          # NOTE: put your own distribution build steps here.
+          # Install all optional dependencies for the build
           python -m pip install build
+          python -m pip install -e ".[dev,client,server]"
           python -m build
 
       - name: Upload distributions
