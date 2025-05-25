@@ -15,8 +15,34 @@ Mojentic MCP is a library providing MCP (Machine Conversation Protocol) server a
 
 ## 🔧 Installation
 
+Basic installation:
 ```bash
 pip install mojentic-mcp
+```
+
+With client functionality only:
+```bash
+pip install "mojentic-mcp[client]"
+```
+
+With server functionality only:
+```bash
+pip install "mojentic-mcp[server]"
+```
+
+With all functionality:
+```bash
+pip install "mojentic-mcp[all]"
+```
+
+For development:
+```bash
+pip install "mojentic-mcp[dev]"
+```
+
+Or combine any options:
+```bash
+pip install "mojentic-mcp[client,server,dev]"
 ```
 
 ## 🚦 Quick Start
